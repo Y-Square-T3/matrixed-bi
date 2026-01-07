@@ -1,6 +1,8 @@
 spring:
   application:
     name: datart-server
+  profiles:
+    active: demo
 
   main:
     banner-mode: off
