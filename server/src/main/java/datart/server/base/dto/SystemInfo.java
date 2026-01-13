@@ -35,4 +35,7 @@ public class SystemInfo {
 
     private boolean initialized;
 
+    private boolean oauthAuthOnly;
+
+    private String wordBackToUsernameAuth;
 }

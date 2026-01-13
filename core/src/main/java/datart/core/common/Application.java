@@ -34,6 +34,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 import static datart.core.base.consts.TenantManagementMode.PLATFORM;
 
@@ -96,7 +97,7 @@ public class Application implements ApplicationContextAware {
     }
 
     public static String getServerPrefix() {
-        return getProperty("server.servlet.context-path","/");
+        return getProperty("server.servlet.context-path", "/");
     }
 
     public static String getTokenSecret() {
@@ -135,16 +136,24 @@ public class Application implements ApplicationContextAware {
     public static void updateInitialized() {
         UserMapperExt userMapper = getBean(UserMapperExt.class);
         if (getCurrMode().equals(PLATFORM)) {
-            initialized = userMapper.selectUserCount()>0;
+            initialized = userMapper.selectUserCount() > 0;
         }
         OrganizationMapperExt orgMapper = getBean(OrganizationMapperExt.class);
         List<Organization> organizations = orgMapper.list();
         int orgCount = CollectionUtils.size(organizations);
-        if (orgCount==0) {
+        if (orgCount == 0) {
             initialized = false;
-        } else if (orgCount==1) {
+        } else if (orgCount == 1) {
             List<User> users = orgMapper.listOrgMembers(organizations.get(0).getId());
-            initialized = users.size()>0;
+            initialized = users.size() > 0;
         }
+    }
+
+    public static boolean oauthAuthOnly() {
+        return BooleanUtils.toBoolean(getProperty("datart.auth.oauth-auth-only"));
+    }
+
+    public static Optional<String> getWordBackToUsernameAuth() {
+        return Optional.ofNullable(getProperty("datart.auth.word-back-to-username-auth"));
     }
 }

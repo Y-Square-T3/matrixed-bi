@@ -53,6 +53,8 @@ public class SysServiceImpl implements SysService {
         systemInfo.setTenantManagementMode(Application.getCurrMode().name());
         systemInfo.setRegisterEnable(Application.canRegister());
         systemInfo.setInitialized(Application.isInitialized());
+        systemInfo.setOauthAuthOnly(Application.oauthAuthOnly());
+        systemInfo.setWordBackToUsernameAuth(Application.getWordBackToUsernameAuth().orElse(null));
         return systemInfo;
     }
 
