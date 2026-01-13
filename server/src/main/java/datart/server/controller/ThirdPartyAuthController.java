@@ -49,8 +49,7 @@ public class ThirdPartyAuthController extends BaseController {
                 .map(registration -> OAuthClientResponse.builder()
                         .clientId(registration.getClientId())
                         .clientName(registration.getClientName())
-                        .authorizationUri(OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI +
-                                "/" + registration.getRegistrationId() + "?redirect_url=/")
+                        .authorizationUri(String.format("%s/%s?redirect_url=/", OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI, registration.getRegistrationId()))
                         .build())
                 .collect(Collectors.toList());
 
