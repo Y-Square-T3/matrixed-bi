@@ -2,6 +2,7 @@ package datart.server.controller;
 
 import datart.core.base.annotations.SkipLogin;
 import datart.server.base.dto.ResponseData;
+import datart.server.controller.response.OAuthClientResponse;
 import datart.server.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -39,20 +39,19 @@ public class ThirdPartyAuthController extends BaseController {
     @ApiOperation(value = "Get Oauth2 clients")
     @GetMapping(value = "getOauth2Clients", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @SkipLogin
-    public ResponseData<List<HashMap<String, String>>> getOauth2Clients(HttpServletRequest request) {
+    public ResponseData<List<OAuthClientResponse>> getOauth2Clients(HttpServletRequest request) {
         if (clientRegistrationRepository == null) {
             return ResponseData.success(Collections.emptyList());
         }
         Iterable<ClientRegistration> clientRegistrations = (Iterable<ClientRegistration>) clientRegistrationRepository;
 
-        List<HashMap<String, String>> clients = StreamSupport.stream(clientRegistrations.spliterator(), false)
-                .map(registration -> {
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put(registration.getClientName(),
-                            OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI +
-                                    "/" + registration.getRegistrationId() + "?redirect_url=/");
-                    return map;
-                })
+        List<OAuthClientResponse> clients = StreamSupport.stream(clientRegistrations.spliterator(), false)
+                .map(registration -> OAuthClientResponse.builder()
+                        .clientId(registration.getClientId())
+                        .clientName(registration.getClientName())
+                        .authorizationUri(OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI +
+                                "/" + registration.getRegistrationId() + "?redirect_url=/")
+                        .build())
                 .collect(Collectors.toList());
 
         return ResponseData.success(clients);
