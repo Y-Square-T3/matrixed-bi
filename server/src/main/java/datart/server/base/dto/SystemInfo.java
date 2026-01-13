@@ -37,5 +37,5 @@ public class SystemInfo {
 
     private boolean oAuthAuthOnly;
 
-    private String wordBackToUsernameAuth;
+    private String wordBackToMixedAuth;
 }

@@ -153,7 +153,7 @@ public class Application implements ApplicationContextAware {
         return BooleanUtils.toBoolean(getProperty("datart.auth.oauth-auth-only"));
     }
 
-    public static Optional<String> getWordBackToUsernameAuth() {
-        return Optional.ofNullable(getProperty("datart.auth.word-back-to-username-auth"));
+    public static Optional<String> getWordBackToMixedAuth() {
+        return Optional.ofNullable(getProperty("datart.auth.word-back-to-mixed-auth"));
     }
 }

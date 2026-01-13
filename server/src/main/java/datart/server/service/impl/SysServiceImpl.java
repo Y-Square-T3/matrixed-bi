@@ -54,7 +54,7 @@ public class SysServiceImpl implements SysService {
         systemInfo.setRegisterEnable(Application.canRegister());
         systemInfo.setInitialized(Application.isInitialized());
         systemInfo.setOAuthAuthOnly(Application.isOAuthAuthOnly());
-        systemInfo.setWordBackToUsernameAuth(Application.getWordBackToUsernameAuth().orElse(null));
+        systemInfo.setWordBackToMixedAuth(Application.getWordBackToMixedAuth().orElse(null));
         return systemInfo;
     }
 

@@ -42,7 +42,7 @@ datart:
 
   auth:
     oauth-auth-only: true
-    word-back-to-username-auth: "this is admin"
+    word-back-to-mixed-auth: "this is admin"
 
   security:
     token:
