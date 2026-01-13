@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Api
 @Slf4j
@@ -43,12 +44,16 @@ public class ThirdPartyAuthController extends BaseController {
             return ResponseData.success(Collections.emptyList());
         }
         Iterable<ClientRegistration> clientRegistrations = (Iterable<ClientRegistration>) clientRegistrationRepository;
-        List<HashMap<String, String>> clients = new ArrayList<>();
-        clientRegistrations.forEach(registration -> {
-            HashMap<String, String> map = new HashMap<>();
-            map.put(registration.getClientName(), OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI + "/" + registration.getRegistrationId() + "?redirect_url=/");
-            clients.add(map);
-        });
+
+        List<HashMap<String, String>> clients = StreamSupport.stream(clientRegistrations.spliterator(), false)
+                .map(registration -> {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put(registration.getClientName(),
+                            OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI +
+                                    "/" + registration.getRegistrationId() + "?redirect_url=/");
+                    return map;
+                })
+                .collect(Collectors.toList());
 
         return ResponseData.success(clients);
     }
