@@ -149,7 +149,7 @@ public class Application implements ApplicationContextAware {
         }
     }
 
-    public static boolean oauthAuthOnly() {
+    public static boolean isOAuthAuthOnly() {
         return BooleanUtils.toBoolean(getProperty("datart.auth.oauth-auth-only"));
     }
 
